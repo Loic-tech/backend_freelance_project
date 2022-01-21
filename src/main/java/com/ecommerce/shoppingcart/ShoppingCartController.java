@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "shop")
@@ -18,28 +19,27 @@ public class ShoppingCartController {
     @Autowired
     shoppingCartRepository shoppingCartRepository;
 
-
-
-
-
     @PostMapping(value = "/adding")
     public ResponseEntity<?> saveBook( @RequestBody ShoppingCart shoppingCart){
-        shoppingCart.setProduct(shoppingCart.getProduct());
-        shoppingCart.setIde(shoppingCart.getIde());
-        shoppingCart.setQuantity(shoppingCart.getQuantity());
         shoppingCartRepository.save(shoppingCart);
 
         return new ResponseEntity<>(shoppingCart, HttpStatus.CREATED);
-
     }
-
-
-
     @GetMapping(value = "/cart/{id}")
     public ResponseEntity<?> AllCart(@PathVariable String id){
         List<ShoppingCart> shoppingCartList = shoppingCartRepository.findShoppingCartByIde(id);
 
         return new ResponseEntity<>(shoppingCartList,HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/count/{id}")
+    public int getCountOfCart(@PathVariable String id) {
+        int count = 0;
+        List<ShoppingCart> shoppingCart = shoppingCartRepository.findShoppingCartByIde(id);
+        for (ShoppingCart cart : shoppingCart) {
+            count += cart.getQuantity();
+        }
+        return count;
     }
 
     @DeleteMapping(value = "/cart/{id}")
@@ -67,12 +67,9 @@ public class ShoppingCartController {
         }
         return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-
-
-
     @GetMapping(value ="/modifyq/{id}" )
-    public ResponseEntity<?> UpdateQuantity(@PathVariable String id, @RequestParam String idb, @RequestParam int quantity) throws ShoppingCartException {
+    public ResponseEntity<?> UpdateQuantity(@PathVariable String id, @RequestParam String idb, @RequestParam int quantity)
+            throws ShoppingCartException {
 
         List<ShoppingCart> shoppingCartList = shoppingCartRepository.findByIde(id);
         if(shoppingCartList.isEmpty())
@@ -87,8 +84,6 @@ public class ShoppingCartController {
                 }
             }
         }
-
-
         return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

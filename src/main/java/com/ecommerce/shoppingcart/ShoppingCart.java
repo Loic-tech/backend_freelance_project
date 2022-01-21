@@ -17,7 +17,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ShoppingCart {
     @Id
     private String id;
-
     private String ide;
     private Product product;
     private Integer quantity;

@@ -1,7 +1,5 @@
 package com.ecommerce.user;
 
-
-
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

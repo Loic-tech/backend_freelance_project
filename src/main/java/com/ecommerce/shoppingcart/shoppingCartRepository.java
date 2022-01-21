@@ -9,4 +9,5 @@ import java.util.List;
 public interface shoppingCartRepository extends MongoRepository<ShoppingCart,String> {
     List<ShoppingCart> findShoppingCartByIde(String i);
     List<ShoppingCart> findByIde(String id);
+
 }

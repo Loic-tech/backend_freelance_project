@@ -20,7 +20,7 @@ public class ShoppingCartController {
     shoppingCartRepository shoppingCartRepository;
 
     @PostMapping(value = "/adding")
-    public ResponseEntity<?> saveBook( @RequestBody ShoppingCart shoppingCart){
+    public ResponseEntity<?> saveBook(@RequestBody ShoppingCart shoppingCart){
         shoppingCartRepository.save(shoppingCart);
 
         return new ResponseEntity<>(shoppingCart, HttpStatus.CREATED);
@@ -42,11 +42,16 @@ public class ShoppingCartController {
         return count;
     }
 
-    @DeleteMapping(value = "/cart/{id}")
-    public ResponseEntity<?> Delete(@PathVariable String id){
+    @DeleteMapping(value = "/cart/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable String id){
         shoppingCartRepository.deleteById(id);
+        return new ResponseEntity<>("deleted", HttpStatus.OK);
+    }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping(value = "/all")
+    public ResponseEntity<?> getAllShopObjects() {
+        List<ShoppingCart> shoppingCartList = shoppingCartRepository.findAll();
+        return new ResponseEntity<>(shoppingCartList,HttpStatus.OK);
     }
 
     @GetMapping(value ="/modify/{id}" )
